@@ -51,7 +51,7 @@ export default function Navbar() {
                   isScrolled || !isHome ? "text-emerald-brand" : "text-white"
                 )}
               >
-                Maimuna
+                Maimuna Islamic Collection
               </span>
             </Link>
 

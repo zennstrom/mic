@@ -40,7 +40,7 @@ export default function ProductCard({ product, index = 0, variant = "default" }:
       {/* Image */}
       <div className="relative overflow-hidden rounded-xl bg-beige-warm/50 aspect-[3/4]">
         <img
-          src={product.images[isHovered && product.images.length > 1 ? 1 : 0]}
+          src="client\public\images\logo.png"
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           loading="lazy"
