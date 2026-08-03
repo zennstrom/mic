@@ -46,7 +46,7 @@ export default function Footer() {
             className="lg:col-span-2"
           >
             <Link href="/" className="flex items-center gap-2.5 mb-5">
-              <img src="/manus-storage/brand-logo_0ac8481a.png" alt="Maimuna" className="h-9 w-9 object-contain" />
+              <img src="/images/logo_rbg.png" alt="Maimuna" className="h-9 w-9 object-contain" />
               <span className="font-serif text-2xl font-medium text-white">Maimuna</span>
             </Link>
             <p className="text-white/60 text-sm leading-relaxed max-w-sm mb-6">

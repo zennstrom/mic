@@ -41,7 +41,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 shrink-0">
               <img
-                src="images\logo_rbg.png"
+                src="/images/logo_rbg.png"
                 alt="Maimuna"
                 className="h-9 w-9 object-contain"
               />
