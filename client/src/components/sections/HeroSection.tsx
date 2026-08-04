@@ -109,7 +109,7 @@ export default function HeroSection() {
         initial={{ opacity: 0, x: 40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, delay: 0.6, ease: [0.23, 1, 0.32, 1] }}
-        className="absolute right-0 top-1/2 -translate-y-1/2 hidden lg:block w-80 xl:w-96"
+        className="absolute right-8 top-1/2 -translate-y-1/2 hidden lg:block w-80 xl:w-96"
       >
         <div className="relative">
           <div className="absolute -inset-4 bg-gold-soft/10 rounded-2xl" />
