@@ -15,11 +15,7 @@ export default function HeroSection() {
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img
-          src="/images/bg1.png"
-          alt="Maimuna Islamic Collection"
-          className="w-full h-full object-cover"
-        />
+
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-emerald-brand/85 via-emerald-brand/60 to-emerald-brand/30" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />

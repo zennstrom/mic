@@ -102,25 +102,7 @@ export default function Navbar() {
                 <Heart className="w-5 h-5" />
               </button>
 
-              <button
-                onClick={openCart}
-                className={cn(
-                  "relative p-2 rounded-full transition-all duration-300 hover:scale-105",
-                  isScrolled || !isHome ? "text-foreground hover:bg-beige-warm/50" : "text-white/90 hover:text-white hover:bg-white/10"
-                )}
-                aria-label="Shopping bag"
-              >
-                <ShoppingBag className="w-5 h-5" />
-                {cartCount > 0 && (
-                  <motion.span
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-gold-soft text-charcoal text-[10px] font-semibold rounded-full flex items-center justify-center"
-                  >
-                    {cartCount}
-                  </motion.span>
-                )}
-              </button>
+
 
               <button
                 onClick={openMobileMenu}
