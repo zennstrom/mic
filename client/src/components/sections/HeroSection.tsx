@@ -114,7 +114,7 @@ export default function HeroSection() {
         <div className="relative">
           <div className="absolute -inset-4 bg-gold-soft/10 rounded-2xl" />
           <img
-            src="/manus-storage/hero-2_0072d134.png"
+            src="images\bg2.png"
             alt="Premium hijab collection"
             className="relative w-full rounded-xl shadow-2xl"
           />
