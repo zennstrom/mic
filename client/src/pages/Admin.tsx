@@ -22,9 +22,13 @@ import {
   EyeOff,
   Sparkles,
   Check,
+  Instagram,
+  Video,
+  Link2,
 } from "lucide-react";
 import { Link } from "wouter";
 import { useProducts } from "@/contexts/ProductContext";
+import { useReels } from "@/contexts/ReelContext";
 import type { Product } from "@/data/products";
 import { toast } from "sonner";
 
@@ -233,6 +237,11 @@ export default function Admin() {
 /* ─── dashboard ───────────────────────────────── */
 function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const { products, addProduct, updateProduct, deleteProduct, resetToDefaults } = useProducts();
+  const { reels, addReel, deleteReel, resetReels } = useReels();
+
+  const [activeTab, setActiveTab] = useState<"products" | "reels">("products");
+
+  // Product Form state
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Omit<Product, "id">>(blankForm());
@@ -241,6 +250,13 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Reel Form state
+  const [showReelForm, setShowReelForm] = useState(false);
+  const [reelUrl, setReelUrl] = useState("");
+  const [reelCaption, setReelCaption] = useState("");
+  const [reelVideoUrl, setReelVideoUrl] = useState("");
+  const [reelDeleteConfirm, setReelDeleteConfirm] = useState<string | null>(null);
 
   /* ── helpers ────────────────────────────── */
   const openAdd = () => {
@@ -326,10 +342,42 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   };
 
   const handleReset = () => {
-    if (window.confirm("Reset all products to defaults? This will remove any products you've added.")) {
-      resetToDefaults();
-      toast.success("Products reset to defaults");
+    if (activeTab === "products") {
+      if (window.confirm("Reset all products to defaults? This will remove any custom products.")) {
+        resetToDefaults();
+        toast.success("Products reset to defaults");
+      }
+    } else {
+      if (window.confirm("Reset all reels to default videos?")) {
+        resetReels();
+        toast.success("Reels reset to defaults");
+      }
     }
+  };
+
+  const handleSaveReel = () => {
+    if (!reelUrl.trim()) {
+      toast.error("Instagram Reel link is required");
+      return;
+    }
+
+    addReel({
+      url: reelUrl.trim(),
+      caption: reelCaption.trim() || undefined,
+      videoUrl: reelVideoUrl.trim() || undefined,
+    });
+
+    toast.success("Reel added successfully");
+    setReelUrl("");
+    setReelCaption("");
+    setReelVideoUrl("");
+    setShowReelForm(false);
+  };
+
+  const handleDeleteReel = (id: string) => {
+    deleteReel(id);
+    setReelDeleteConfirm(null);
+    toast.success("Reel deleted");
   };
 
   useEffect(() => {
@@ -388,11 +436,14 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
             </button>
 
             <button
-              onClick={openAdd}
+              onClick={() => {
+                if (activeTab === "products") openAdd();
+                else setShowReelForm(true);
+              }}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-brand hover:bg-emerald-brand/90 text-white text-xs font-medium tracking-wide shadow-md transition-all active:scale-95"
             >
               <Plus className="w-4 h-4" />
-              Add Product
+              {activeTab === "products" ? "Add Product" : "Add Reel"}
             </button>
           </div>
         </div>
@@ -400,174 +451,446 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* Navigation Tabs */}
+        <div className="flex items-center gap-3 mb-8 border-b border-border/80 pb-4">
+          <button
+            onClick={() => setActiveTab("products")}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-medium transition-all ${
+              activeTab === "products"
+                ? "bg-emerald-brand text-white shadow-sm"
+                : "bg-white text-muted-foreground hover:bg-beige-warm/60 border border-border"
+            }`}
+          >
+            <Package className="w-4 h-4" />
+            Products Catalog ({products.length})
+          </button>
+          <button
+            onClick={() => setActiveTab("reels")}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-medium transition-all ${
+              activeTab === "reels"
+                ? "bg-emerald-brand text-white shadow-sm"
+                : "bg-white text-muted-foreground hover:bg-beige-warm/60 border border-border"
+            }`}
+          >
+            <Instagram className="w-4 h-4" />
+            Instagram Reels ({reels.length})
+          </button>
+        </div>
+
         {/* Header Title */}
         <div className="mb-10">
           <span className="text-gold-soft text-xs font-medium uppercase tracking-[0.2em] block mb-2">
-            Catalog Overview
+            {activeTab === "products" ? "Catalog Overview" : "Social Media Integration"}
           </span>
           <h1 className="font-serif text-3xl lg:text-4xl font-medium text-foreground mb-2">
-            Manage Products
+            {activeTab === "products" ? "Manage Products" : "Manage Instagram Reels"}
           </h1>
           <p className="text-muted-foreground text-sm">
-            Add new hijabs, edit pricing, or manage catalog inventory displayed in "Our Collection".
+            {activeTab === "products"
+              ? "Add new hijabs, edit pricing, or manage catalog inventory displayed in 'Our Collection'."
+              : "Add Instagram reel links or video previews displayed in 'Styled by You — Reels' section."}
           </p>
           <div className="w-12 h-[2px] bg-gold-soft mt-4" />
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-10">
-          {[
-            { label: "Total Inventory", value: products.length, badge: "Catalog" },
-            { label: "Premium Collection", value: products.filter(p => p.category === "Premium").length, badge: "Premium" },
-            { label: "Casual Essentials", value: products.filter(p => p.category === "Casual").length, badge: "Casual" },
-            { label: "Formal Couture", value: products.filter(p => p.category === "Formal").length, badge: "Formal" },
-          ].map(stat => (
-            <div
-              key={stat.label}
-              className="rounded-2xl bg-white border border-border p-5 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <span className="text-gold-soft text-[10px] font-semibold uppercase tracking-widest block mb-1">
-                {stat.badge}
-              </span>
-              <p className="text-muted-foreground text-xs font-medium mb-1">{stat.label}</p>
-              <p className="font-serif text-3xl font-semibold text-emerald-brand">{stat.value}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Products Table Card */}
-        <div className="rounded-2xl bg-white border border-border shadow-sm overflow-hidden">
-          <div className="px-6 py-5 border-b border-border bg-beige-warm/20 flex items-center justify-between">
-            <h2 className="font-serif text-xl font-medium text-foreground">All Products</h2>
-            <span className="text-xs font-medium text-muted-foreground bg-white px-3 py-1 rounded-full border border-border">
-              {products.length} {products.length === 1 ? "Item" : "Items"}
-            </span>
-          </div>
-
-          {products.length === 0 ? (
-            <div className="text-center py-20 px-4">
-              <Package className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-              <h3 className="font-serif text-xl font-medium mb-1">No products found</h3>
-              <p className="text-muted-foreground text-sm mb-6">
-                Your store currently has no products. Add a new product to publish it to the site.
-              </p>
-              <button
-                onClick={openAdd}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-brand text-white text-xs font-medium tracking-wide shadow-md hover:bg-emerald-brand/90 transition-all"
-              >
-                <Plus className="w-4 h-4" />
-                Add First Product
-              </button>
-            </div>
-          ) : (
-            <div className="divide-y divide-border/60">
-              {products.map((product) => (
+        {/* ── PRODUCTS TAB VIEW ──────────── */}
+        {activeTab === "products" && (
+          <>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-10">
+              {[
+                { label: "Total Inventory", value: products.length, badge: "Catalog" },
+                { label: "Premium Collection", value: products.filter(p => p.category === "Premium").length, badge: "Premium" },
+                { label: "Casual Essentials", value: products.filter(p => p.category === "Casual").length, badge: "Casual" },
+                { label: "Formal Couture", value: products.filter(p => p.category === "Formal").length, badge: "Formal" },
+              ].map(stat => (
                 <div
-                  key={product.id}
-                  className="px-6 py-4 flex items-center gap-4 sm:gap-6 hover:bg-beige-warm/20 transition-colors group"
+                  key={stat.label}
+                  className="rounded-2xl bg-white border border-border p-5 shadow-sm hover:shadow-md transition-shadow"
                 >
-                  {/* Image Thumbnail */}
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-beige-warm/50 border border-border overflow-hidden shrink-0 aspect-square">
-                    {product.images[0] ? (
-                      <img
-                        src={product.images[0]}
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <ImageIcon className="w-6 h-6 text-muted-foreground/30" />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-gold-soft">
-                        {product.category}
-                      </span>
-                      {product.subcategory && (
-                        <span className="text-[10px] text-muted-foreground/60">
-                          • {product.subcategory}
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="font-serif text-base font-medium text-foreground truncate group-hover:text-emerald-brand transition-colors">
-                      {product.name}
-                    </h3>
-                    <div className="flex items-center gap-3 mt-1 flex-wrap">
-                      <span className="text-sm font-semibold text-emerald-brand">
-                        ${product.price.toFixed(2)}
-                      </span>
-                      {product.comparePrice && (
-                        <span className="text-xs text-muted-foreground line-through">
-                          ${product.comparePrice.toFixed(2)}
-                        </span>
-                      )}
-                      
-                      {/* Badges */}
-                      <div className="flex items-center gap-1.5 ml-2">
-                        {product.isNew && (
-                          <span className="bg-emerald-brand text-white text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full">
-                            New
-                          </span>
-                        )}
-                        {product.isBestseller && (
-                          <span className="bg-amber-100 text-amber-800 border border-amber-200 text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full">
-                            Bestseller
-                          </span>
-                        )}
-                        {product.isSale && (
-                          <span className="bg-gold-soft text-charcoal text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full">
-                            Sale
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      onClick={() => openEdit(product)}
-                      className="p-2.5 rounded-full text-muted-foreground hover:text-emerald-brand hover:bg-beige-warm/60 border border-transparent hover:border-border transition-all"
-                      title="Edit product"
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </button>
-
-                    {deleteConfirm === product.id ? (
-                      <div className="flex items-center gap-1.5 bg-red-50 p-1 rounded-full border border-red-200">
-                        <button
-                          onClick={() => handleDelete(product.id)}
-                          className="px-3 py-1 rounded-full bg-red-600 text-white text-xs font-medium hover:bg-red-700 transition-colors"
-                        >
-                          Delete
-                        </button>
-                        <button
-                          onClick={() => setDeleteConfirm(null)}
-                          className="px-2 py-1 rounded-full text-muted-foreground text-xs hover:text-foreground"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => setDeleteConfirm(product.id)}
-                        className="p-2.5 rounded-full text-muted-foreground hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 transition-all"
-                        title="Delete product"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
+                  <span className="text-gold-soft text-[10px] font-semibold uppercase tracking-widest block mb-1">
+                    {stat.badge}
+                  </span>
+                  <p className="text-muted-foreground text-xs font-medium mb-1">{stat.label}</p>
+                  <p className="font-serif text-3xl font-semibold text-emerald-brand">{stat.value}</p>
                 </div>
               ))}
             </div>
-          )}
-        </div>
+
+            {/* Products Table Card */}
+            <div className="rounded-2xl bg-white border border-border shadow-sm overflow-hidden">
+              <div className="px-6 py-5 border-b border-border bg-beige-warm/20 flex items-center justify-between">
+                <h2 className="font-serif text-xl font-medium text-foreground">All Products</h2>
+                <span className="text-xs font-medium text-muted-foreground bg-white px-3 py-1 rounded-full border border-border">
+                  {products.length} {products.length === 1 ? "Item" : "Items"}
+                </span>
+              </div>
+
+              {products.length === 0 ? (
+                <div className="text-center py-20 px-4">
+                  <Package className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+                  <h3 className="font-serif text-xl font-medium mb-1">No products found</h3>
+                  <p className="text-muted-foreground text-sm mb-6">
+                    Your store currently has no products. Add a new product to publish it to the site.
+                  </p>
+                  <button
+                    onClick={openAdd}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-brand text-white text-xs font-medium tracking-wide shadow-md hover:bg-emerald-brand/90 transition-all"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add First Product
+                  </button>
+                </div>
+              ) : (
+                <div className="divide-y divide-border/60">
+                  {products.map((product) => (
+                    <div
+                      key={product.id}
+                      className="px-6 py-4 flex items-center gap-4 sm:gap-6 hover:bg-beige-warm/20 transition-colors group"
+                    >
+                      {/* Image Thumbnail */}
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-beige-warm/50 border border-border overflow-hidden shrink-0 aspect-square">
+                        {product.images[0] ? (
+                          <img
+                            src={product.images[0]}
+                            alt={product.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <ImageIcon className="w-6 h-6 text-muted-foreground/30" />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-gold-soft">
+                            {product.category}
+                          </span>
+                          {product.subcategory && (
+                            <span className="text-[10px] text-muted-foreground/60">
+                              • {product.subcategory}
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="font-serif text-base font-medium text-foreground truncate group-hover:text-emerald-brand transition-colors">
+                          {product.name}
+                        </h3>
+                        <div className="flex items-center gap-3 mt-1 flex-wrap">
+                          <span className="text-sm font-semibold text-emerald-brand">
+                            ${product.price.toFixed(2)}
+                          </span>
+                          {product.comparePrice && (
+                            <span className="text-xs text-muted-foreground line-through">
+                              ${product.comparePrice.toFixed(2)}
+                            </span>
+                          )}
+                          
+                          {/* Badges */}
+                          <div className="flex items-center gap-1.5 ml-2">
+                            {product.isNew && (
+                              <span className="bg-emerald-brand text-white text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full">
+                                New
+                              </span>
+                            )}
+                            {product.isBestseller && (
+                              <span className="bg-amber-100 text-amber-800 border border-amber-200 text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full">
+                                Bestseller
+                              </span>
+                            )}
+                            {product.isSale && (
+                              <span className="bg-gold-soft text-charcoal text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full">
+                                Sale
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          onClick={() => openEdit(product)}
+                          className="p-2.5 rounded-full text-muted-foreground hover:text-emerald-brand hover:bg-beige-warm/60 border border-transparent hover:border-border transition-all"
+                          title="Edit product"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+
+                        {deleteConfirm === product.id ? (
+                          <div className="flex items-center gap-1.5 bg-red-50 p-1 rounded-full border border-red-200">
+                            <button
+                              onClick={() => handleDelete(product.id)}
+                              className="px-3 py-1 rounded-full bg-red-600 text-white text-xs font-medium hover:bg-red-700 transition-colors"
+                            >
+                              Delete
+                            </button>
+                            <button
+                              onClick={() => setDeleteConfirm(null)}
+                              className="px-2 py-1 rounded-full text-muted-foreground text-xs hover:text-foreground"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setDeleteConfirm(product.id)}
+                            className="p-2.5 rounded-full text-muted-foreground hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 transition-all"
+                            title="Delete product"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
+        )}
+
+        {/* ── REELS TAB VIEW ─────────────── */}
+        {activeTab === "reels" && (
+          <>
+            {/* Reels Stats Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-10">
+              {[
+                { label: "Active Reels", value: reels.length, badge: "Social Feed" },
+                { label: "Instagram Links", value: reels.filter(r => r.url.includes("instagram")).length, badge: "Instagram" },
+                { label: "Auto-play Previews", value: reels.filter(r => !!r.videoUrl).length, badge: "HTML5 Video" },
+              ].map(stat => (
+                <div
+                  key={stat.label}
+                  className="rounded-2xl bg-white border border-border p-5 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <span className="text-gold-soft text-[10px] font-semibold uppercase tracking-widest block mb-1">
+                    {stat.badge}
+                  </span>
+                  <p className="text-muted-foreground text-xs font-medium mb-1">{stat.label}</p>
+                  <p className="font-serif text-3xl font-semibold text-emerald-brand">{stat.value}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Reels List Card */}
+            <div className="rounded-2xl bg-white border border-border shadow-sm overflow-hidden">
+              <div className="px-6 py-5 border-b border-border bg-beige-warm/20 flex items-center justify-between">
+                <h2 className="font-serif text-xl font-medium text-foreground">Instagram Reels</h2>
+                <button
+                  onClick={() => setShowReelForm(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-brand text-white text-xs font-medium shadow-sm hover:bg-emerald-brand/90 transition-all"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  Add Reel
+                </button>
+              </div>
+
+              {reels.length === 0 ? (
+                <div className="text-center py-20 px-4">
+                  <Instagram className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+                  <h3 className="font-serif text-xl font-medium mb-1">No reels added</h3>
+                  <p className="text-muted-foreground text-sm mb-6">
+                    Add Instagram reel URLs to feature them on the website.
+                  </p>
+                  <button
+                    onClick={() => setShowReelForm(true)}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-brand text-white text-xs font-medium shadow-md hover:bg-emerald-brand/90 transition-all"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add First Reel
+                  </button>
+                </div>
+              ) : (
+                <div className="divide-y divide-border/60">
+                  {reels.map((reel) => (
+                    <div
+                      key={reel.id}
+                      className="px-6 py-4 flex items-center gap-4 sm:gap-6 hover:bg-beige-warm/20 transition-colors group"
+                    >
+                      {/* Reel Thumbnail */}
+                      <div className="w-14 h-20 rounded-xl bg-beige-warm/50 border border-border overflow-hidden shrink-0 aspect-[9/16] relative">
+                        {reel.videoUrl ? (
+                          <video
+                            src={reel.videoUrl}
+                            muted
+                            loop
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <img
+                            src={reel.thumbnail || "/images/placeholder.png"}
+                            alt={reel.caption || "Reel"}
+                            className="w-full h-full object-cover"
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                          <Instagram className="w-4 h-4 text-white" />
+                        </div>
+                      </div>
+
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-gold-soft">
+                            {reel.author || "@maimunacollection"}
+                          </span>
+                        </div>
+                        <h3 className="font-serif text-sm font-medium text-foreground line-clamp-2 mb-1">
+                          {reel.caption || "No caption provided"}
+                        </h3>
+                        <a
+                          href={reel.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-emerald-brand hover:underline truncate inline-flex items-center gap-1"
+                        >
+                          <Link2 className="w-3 h-3" />
+                          {reel.url}
+                        </a>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center gap-2 shrink-0">
+                        {reelDeleteConfirm === reel.id ? (
+                          <div className="flex items-center gap-1.5 bg-red-50 p-1 rounded-full border border-red-200">
+                            <button
+                              onClick={() => handleDeleteReel(reel.id)}
+                              className="px-3 py-1 rounded-full bg-red-600 text-white text-xs font-medium hover:bg-red-700 transition-colors"
+                            >
+                              Delete
+                            </button>
+                            <button
+                              onClick={() => setReelDeleteConfirm(null)}
+                              className="px-2 py-1 rounded-full text-muted-foreground text-xs hover:text-foreground"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setReelDeleteConfirm(reel.id)}
+                            className="p-2.5 rounded-full text-muted-foreground hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 transition-all"
+                            title="Delete reel"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </main>
+
+      {/* ── Add Reel Modal ──────────────────────────────── */}
+      <AnimatePresence>
+        {showReelForm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+            onClick={(e) => { if (e.target === e.currentTarget) setShowReelForm(false); }}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 25, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 25, scale: 0.98 }}
+              transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+              className="relative w-full max-w-lg rounded-2xl bg-white border border-border shadow-2xl overflow-hidden my-8"
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between px-6 py-5 border-b border-border bg-beige-warm/20">
+                <div>
+                  <span className="text-gold-soft text-[10px] font-semibold uppercase tracking-widest block">
+                    Social Integration
+                  </span>
+                  <h2 className="font-serif text-2xl font-medium text-foreground">
+                    Add Instagram Reel
+                  </h2>
+                </div>
+                <button
+                  onClick={() => setShowReelForm(false)}
+                  className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-beige-warm/60 transition-all"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Form Body */}
+              <div className="p-6 space-y-5">
+                <div>
+                  <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-2 block">
+                    Reel Link / URL *
+                  </label>
+                  <input
+                    type="url"
+                    value={reelUrl}
+                    onChange={e => setReelUrl(e.target.value)}
+                    placeholder="e.g. https://www.instagram.com/reel/C..."
+                    autoFocus
+                    className="w-full px-4 py-3 rounded-xl bg-beige-warm/20 border border-border text-foreground text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-emerald-brand focus:ring-2 focus:ring-emerald-brand/10 transition-all"
+                  />
+                  <p className="text-[11px] text-muted-foreground mt-1">
+                    Paste an Instagram Reel link or post URL. The cover thumbnail will be automatically detected.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-2 block">
+                    Caption / Title <span className="normal-case text-muted-foreground/60">(Optional)</span>
+                  </label>
+                  <textarea
+                    value={reelCaption}
+                    onChange={e => setReelCaption(e.target.value)}
+                    placeholder="Short description or styling tips..."
+                    rows={2}
+                    className="w-full px-4 py-2.5 rounded-xl bg-beige-warm/20 border border-border text-foreground text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-emerald-brand focus:ring-2 focus:ring-emerald-brand/10 transition-all resize-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-2 block">
+                    Preview Video MP4 URL <span className="normal-case text-muted-foreground/60">(Optional for auto-play)</span>
+                  </label>
+                  <input
+                    type="url"
+                    value={reelVideoUrl}
+                    onChange={e => setReelVideoUrl(e.target.value)}
+                    placeholder="https://...video.mp4 (Optional for HTML5 hover/autoplay)"
+                    className="w-full px-4 py-2.5 rounded-xl bg-beige-warm/20 border border-border text-foreground text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-emerald-brand focus:ring-2 focus:ring-emerald-brand/10 transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-border bg-beige-warm/20">
+                <button
+                  type="button"
+                  onClick={() => setShowReelForm(false)}
+                  className="px-5 py-2.5 rounded-full text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-beige-warm/60 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveReel}
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-emerald-brand hover:bg-emerald-brand/90 text-white text-xs font-medium tracking-wide shadow-md transition-all active:scale-95"
+                >
+                  <Save className="w-4 h-4" />
+                  Save Reel
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Add / Edit Modal (Homepage Aesthetic) ──────────── */}
       <AnimatePresence>

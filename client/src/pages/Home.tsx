@@ -28,10 +28,10 @@ export default function Home() {
       <main>
         <HeroSection />
         <OurCollection />
+        <InstagramGallery />
         <WhyChooseUs />
         <LifestyleBanner />
         <Testimonials />
-        <InstagramGallery />
         <Newsletter />
       </main>
 

@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { StoreProvider } from "./contexts/StoreContext";
 import { ProductProvider } from "./contexts/ProductContext";
+import { ReelProvider } from "./contexts/ReelContext";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
 import ProductPage from "./pages/ProductPage";
@@ -33,12 +34,14 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
         <ProductProvider>
-          <StoreProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Router />
-            </TooltipProvider>
-          </StoreProvider>
+          <ReelProvider>
+            <StoreProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Router />
+              </TooltipProvider>
+            </StoreProvider>
+          </ReelProvider>
         </ProductProvider>
       </ThemeProvider>
     </ErrorBoundary>
