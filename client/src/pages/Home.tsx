@@ -10,8 +10,7 @@ import CartDrawer from "@/components/layout/CartDrawer";
 import SearchModal from "@/components/layout/SearchModal";
 import ScrollToTop from "@/components/layout/ScrollToTop";
 import HeroSection from "@/components/sections/HeroSection";
-import FeaturedCollection from "@/components/sections/FeaturedCollection";
-import BestSellers from "@/components/sections/BestSellers";
+import OurCollection from "@/components/sections/OurCollection";
 import WhyChooseUs from "@/components/sections/WhyChooseUs";
 import LifestyleBanner from "@/components/sections/LifestyleBanner";
 import Testimonials from "@/components/sections/Testimonials";
@@ -28,8 +27,7 @@ export default function Home() {
 
       <main>
         <HeroSection />
-        <FeaturedCollection />
-        <BestSellers />
+        <OurCollection />
         <WhyChooseUs />
         <LifestyleBanner />
         <Testimonials />

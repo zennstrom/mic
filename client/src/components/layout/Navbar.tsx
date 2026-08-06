@@ -7,7 +7,7 @@
  */
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ShoppingBag, Heart, Menu, X } from "lucide-react";
+import { Search, ShoppingBag, Heart, Menu, X, Lock } from "lucide-react";
 import { useStore } from "@/contexts/StoreContext";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { Link, useLocation } from "wouter";
@@ -102,7 +102,16 @@ export default function Navbar() {
                 <Heart className="w-5 h-5" />
               </button>
 
-
+              <Link
+                href="/admin"
+                className={cn(
+                  "p-2 rounded-full transition-all duration-300 hover:scale-105 hidden sm:flex items-center justify-center",
+                  isScrolled || !isHome ? "text-foreground hover:bg-beige-warm/50" : "text-white/90 hover:text-white hover:bg-white/10"
+                )}
+                aria-label="Admin panel"
+              >
+                <Lock className="w-5 h-5" />
+              </Link>
 
               <button
                 onClick={openMobileMenu}

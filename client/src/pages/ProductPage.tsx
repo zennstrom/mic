@@ -12,18 +12,19 @@ import CartDrawer from "@/components/layout/CartDrawer";
 import SearchModal from "@/components/layout/SearchModal";
 import ScrollToTop from "@/components/layout/ScrollToTop";
 import ProductCard from "@/components/product/ProductCard";
-import { products } from "@/data/products";
+import { useProducts } from "@/contexts/ProductContext";
 import { useStore } from "@/contexts/StoreContext";
 import { toast } from "sonner";
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const { addToCart, toggleWishlist, isInWishlist, addRecentlyViewed } = useStore();
+  const { products } = useProducts();
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
-  const product = useMemo(() => products.find(p => p.slug === slug), [slug]);
+  const product = useMemo(() => products.find(p => p.slug === slug), [slug, products]);
 
   // Track recently viewed
   if (product) {

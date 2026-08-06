@@ -12,7 +12,7 @@ import CartDrawer from "@/components/layout/CartDrawer";
 import SearchModal from "@/components/layout/SearchModal";
 import ScrollToTop from "@/components/layout/ScrollToTop";
 import ProductCard from "@/components/product/ProductCard";
-import { products, categories } from "@/data/products";
+import { useProducts } from "@/contexts/ProductContext";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Button } from "@/components/ui/button";
 
@@ -22,6 +22,7 @@ export default function Shop() {
   const [location] = useLocation();
   const params = new URLSearchParams(location.split("?")[1] || "");
   const initialCategory = params.get("category") || "all";
+  const { products, categories } = useProducts();
 
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [sortBy, setSortBy] = useState<SortOption>("featured");
@@ -58,7 +59,7 @@ export default function Shop() {
     }
 
     return result;
-  }, [activeCategory, sortBy, priceRange]);
+  }, [activeCategory, sortBy, priceRange, products]);
 
   return (
     <div className="min-h-screen">
