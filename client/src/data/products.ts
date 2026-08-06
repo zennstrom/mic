@@ -20,38 +20,7 @@ export interface Product {
   isSale?: boolean;
 }
 
-// Curated product image URLs — each product gets unique imagery
-// Mix of generated category images, uploaded product photos, and Unsplash hijab/fabric shots
-const img = {
-  hero1: "/manus-storage/hero-1_49258346.png",
-  hero2: "/manus-storage/hero-2_0072d134.png",
-  premium: "/manus-storage/category-premium_0d5ff047.png",
-  casual: "/manus-storage/category-casual_636d20fa.png",
-  formal: "/manus-storage/category-formal_867580ed.png",
-  lifestyle: "/manus-storage/lifestyle-banner_c351dad1.png",
-  insta: "/manus-storage/instagram-gallery_fa20141d.png",
-  // Uploaded product/hijab images
-  hijab1: "/manus-storage/xTtP5Zo7jxdQ_a4a9586c.jpg", // hijab flatlay green
-  hijab2: "/manus-storage/RbIhzN0myAL6_1e2aa5ce.jpg", // silk scarf
-  hijab3: "/manus-storage/30Lt63vK6KHm_6790e5b3.jpg", // hijab editorial
-  hijab4: "/manus-storage/WNaWxX0wjBHf_8f99c0b3.jpg", // hijab editorial 2
-  hijab5: "/manus-storage/tF5CaeDDbAXb_cdb47986.jpg", // hijab style
-  hijab6: "/manus-storage/jctDrzWCd8Og_81a5d923.jpg", // hijab style 2
-  hijab7: "/manus-storage/jrj72dlLVPRw_fdd6d799.jpg", // hijab product
-  hijab8: "/manus-storage/qmymOoGZyRmZ_d69f577e.jpg", // hijab fashion
-};
-
-// Curated fabric/scarf/hijab product images
-const fabricImgs = [
-  "/manus-storage/ckuMXm2jP8Qb_c77e3806.jpg",  // hijab product photography
-  "/manus-storage/eJcoQeCfA1Ty_0ba271f7.jpg",  // hijab fabric types
-  "/manus-storage/fdKtWTLzqMFq_807f38f0.jpg",  // luxury fabric
-  "/manus-storage/Yxv0GxkVcJqd_4ba87c2b.png",  // modest fashion model
-  "/manus-storage/XsF2Tyw61SOP_8fcba081.jpg",  // scarf photography
-  "/manus-storage/H51Z3X1IzuTM_d281ad37.jpg",  // luxury pashmina
-  "/manus-storage/miOxGxIZwZCG_f05ecb2a.jpg",  // modest fashion editorial
-  "/manus-storage/BoiSIgaScxMY_1a0c7d42.png",  // silk scarf closeup
-];
+const PLACEHOLDER_IMAGE = "/images/placeholder.png";
 
 export const products: Product[] = [
   {
@@ -68,12 +37,7 @@ export const products: Product[] = [
     dimensions: "180cm x 75cm",
     features: ["Silk-like hand feel", "Non-slip texture", "Hand-rolled edges", "Breathable weave", "Wrinkle resistant"],
     colors: ["Deep Emerald", "Warm Beige", "Soft Gold", "Charcoal", "Navy"],
-    images: [
-      img.hijab1,
-      img.hijab5,
-      fabricImgs[0],
-      fabricImgs[3],
-    ],
+    images: [PLACEHOLDER_IMAGE],
     rating: 4.8,
     reviewCount: 142,
     isBestseller: true,
@@ -92,12 +56,7 @@ export const products: Product[] = [
     dimensions: "180cm x 70cm",
     features: ["Four-way stretch", "No-pins-needed fit", "Matte finish", "Machine washable", "Fade resistant"],
     colors: ["Black", "Warm Beige", "Dusty Rose", "Sage Green", "Charcoal"],
-    images: [
-      img.casual,
-      img.hijab6,
-      fabricImgs[4],
-      fabricImgs[0],
-    ],
+    images: [PLACEHOLDER_IMAGE],
     rating: 4.7,
     reviewCount: 98,
     isBestseller: true,
@@ -115,12 +74,7 @@ export const products: Product[] = [
     dimensions: "180cm x 75cm",
     features: ["Lustrous satin finish", "Medium-weight drape", "Elegant sheen", "Fray-resistant edges", "Color-fast dye"],
     colors: ["Emerald", "Black", "Deep Burgundy", "Navy", "Gold"],
-    images: [
-      img.hijab2,
-      img.formal,
-      fabricImgs[7],
-      fabricImgs[1],
-    ],
+    images: [PLACEHOLDER_IMAGE],
     rating: 4.9,
     reviewCount: 76,
     isNew: true,
@@ -139,12 +93,7 @@ export const products: Product[] = [
     dimensions: "180cm x 70cm",
     features: ["100% organic cotton", "Crinkle texture", "Breathable weave", "Pre-washed softness", "Eco-friendly"],
     colors: ["Natural Beige", "Olive", "Terracotta", "Sky Blue", "White"],
-    images: [
-      img.hijab7,
-      fabricImgs[5],
-      fabricImgs[6],
-      img.hijab8,
-    ],
+    images: [PLACEHOLDER_IMAGE],
     rating: 4.6,
     reviewCount: 54,
     isSale: true,
@@ -162,12 +111,7 @@ export const products: Product[] = [
     dimensions: "180cm x 75cm",
     features: ["Silk-cotton blend", "Liquid-like drape", "Natural sheen", "Temperature regulating", "Hand-wash recommended"],
     colors: ["Ivory", "Midnight Blue", "Rose Gold", "Charcoal", "Sage"],
-    images: [
-      img.hero2,
-      img.hijab3,
-      fabricImgs[2],
-      fabricImgs[4],
-    ],
+    images: [PLACEHOLDER_IMAGE],
     rating: 5.0,
     reviewCount: 31,
     isNew: true,
@@ -185,12 +129,7 @@ export const products: Product[] = [
     dimensions: "180cm x 70cm",
     features: ["Buttery-soft texture", "Moisture-wicking", "Anti-bacterial", "Softens with washing", "Lightweight drape"],
     colors: ["Mauve", "Stone Grey", "Sage", "Caramel", "Deep Plum"],
-    images: [
-      img.hijab8,
-      fabricImgs[1],
-      fabricImgs[7],
-      img.hijab4,
-    ],
+    images: [PLACEHOLDER_IMAGE],
     rating: 4.7,
     reviewCount: 67,
   },
@@ -207,12 +146,7 @@ export const products: Product[] = [
     dimensions: "180cm x 75cm",
     features: ["Textured surface", "Subtle shimmer", "Secure drape", "Medium weight", "Versatile styling"],
     colors: ["Champagne", "Deep Emerald", "Dusty Mauve", "Slate Blue", "Black"],
-    images: [
-      img.hijab3,
-      img.hijab1,
-      fabricImgs[3],
-      fabricImgs[6],
-    ],
+    images: [PLACEHOLDER_IMAGE],
     rating: 4.8,
     reviewCount: 89,
   },
@@ -230,12 +164,7 @@ export const products: Product[] = [
     dimensions: "180cm x 70cm",
     features: ["Pure linen", "Maximum breathability", "Natural texture", "Softens over time", "Eco-friendly"],
     colors: ["Natural", "Sage", "Terracotta", "Stone", "Off White"],
-    images: [
-      img.hijab4,
-      fabricImgs[5],
-      img.hijab7,
-      fabricImgs[2],
-    ],
+    images: [PLACEHOLDER_IMAGE],
     rating: 4.5,
     reviewCount: 43,
     isSale: true,
@@ -253,12 +182,7 @@ export const products: Product[] = [
     dimensions: "180cm x 75cm",
     features: ["Hand-embroidered border", "Artisan crafted", "Tonal embroidery", "Lightweight", "Special occasion"],
     colors: ["Ivory & Gold", "Black & Silver", "Emerald & Gold", "Navy & Silver", "Rose & Rose Gold"],
-    images: [
-      img.hijab5,
-      img.hijab2,
-      fabricImgs[7],
-      fabricImgs[0],
-    ],
+    images: [PLACEHOLDER_IMAGE],
     rating: 4.9,
     reviewCount: 28,
     isNew: true,
@@ -276,12 +200,7 @@ export const products: Product[] = [
     dimensions: "One size fits all",
     features: ["Pre-sewn design", "Quick styling", "Stretchy fit", "Set of 3 colors", "Washable"],
     colors: ["Nude Set", "Black Set", "Pastel Set", "Earth Tones Set"],
-    images: [
-      img.casual,
-      fabricImgs[4],
-      img.hijab6,
-      fabricImgs[1],
-    ],
+    images: [PLACEHOLDER_IMAGE],
     rating: 4.4,
     reviewCount: 112,
   },
@@ -298,12 +217,7 @@ export const products: Product[] = [
     dimensions: "180cm x 75cm",
     features: ["Velvet texture", "Winter warmth", "Plush feel", "Elegant drape", "Non-slip surface"],
     colors: ["Burgundy", "Forest Green", "Navy", "Charcoal", "Dusty Rose"],
-    images: [
-      img.premium,
-      img.hijab5,
-      fabricImgs[5],
-      fabricImgs[3],
-    ],
+    images: [PLACEHOLDER_IMAGE],
     rating: 4.6,
     reviewCount: 35,
   },
@@ -320,12 +234,7 @@ export const products: Product[] = [
     dimensions: "180cm x 75cm",
     features: ["Structured drape", "Sheer overlay", "Volume building", "Layerable", "Statement piece"],
     colors: ["Midnight Blue", "Deep Burgundy", "Emerald", "Black", "Blush Pink"],
-    images: [
-      img.formal,
-      img.hijab3,
-      fabricImgs[7],
-      fabricImgs[6],
-    ],
+    images: [PLACEHOLDER_IMAGE],
     rating: 4.7,
     reviewCount: 22,
     isNew: true,

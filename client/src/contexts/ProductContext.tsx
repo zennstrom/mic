@@ -26,10 +26,12 @@ export function ProductProvider({ children }: { children: ReactNode }) {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((p: Product) => ({ ...p, images: ["/images/placeholder.png"] }));
+        }
       }
     } catch {}
-    return [...defaultProducts];
+    return defaultProducts.map(p => ({ ...p, images: ["/images/placeholder.png"] }));
   });
 
   // Persist to localStorage on change
@@ -57,7 +59,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const resetToDefaults = useCallback(() => {
-    setProducts([...defaultProducts]);
+    setProducts(defaultProducts.map(p => ({ ...p, images: ["/images/placeholder.png"] })));
   }, []);
 
   // Dynamically compute categories from current products

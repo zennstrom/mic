@@ -140,7 +140,7 @@ export default function Navbar() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between p-4 border-b border-border">
                 <Link href="/" onClick={closeMobileMenu} className="flex items-center gap-2.5">
-                  <img src="/manus-storage/brand-logo_0ac8481a.png" alt="Maimuna" className="h-8 w-8 object-contain" />
+                  <img src="/images/logo_rbg.png" alt="Maimuna" className="h-8 w-8 object-contain" />
                   <span className="font-serif text-xl text-emerald-brand">Maimuna</span>
                 </Link>
                 <button
