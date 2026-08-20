@@ -14,6 +14,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
 
+
 function Router() {
   return (
     <Switch>
@@ -30,6 +31,7 @@ function Router() {
 }
 
 function App() {
+
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
@@ -45,6 +47,7 @@ function App() {
         </ProductProvider>
       </ThemeProvider>
     </ErrorBoundary>
+    
   );
 }
 
