@@ -1,51 +1,83 @@
-MIC
-A web application built with React, TypeScript, and Supabase.
+# 🎙️ MIC
 
-🚀 Getting Started
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+<p align="center">
+  <img src="https://img.shields.io/github/license/zennstrom/mic?style=for-the-badge&color=blue" alt="License" />
+  <img src="https://img.shields.io/github/stars/zennstrom/mic?style=for-the-badge&color=gold" alt="Stars" />
+  <img src="https://img.shields.io/github/issues/zennstrom/mic?style=for-the-badge&color=red" alt="Issues" />
+  <img src="https://img.shields.io/github/last-commit/zennstrom/mic?style=for-the-badge&color=green" alt="Last Commit" />
+</p>
 
-Prerequisites
-Node.js (v18+ recommended)
+<p align="center">
+  A modern, type-safe web application powered by <b>React</b>, <b>TypeScript</b>, <b>Vite</b>, and <b>Supabase</b>.
+</p>
 
-npm or yarn
+---
 
-A Supabase project
+## 📑 Table of Contents
 
-Installation
-Clone the repository:
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Tech Stack](#-tech-stack)
+- [Architecture & Directory Structure](#-architecture--directory-structure)
+- [Getting Started](#-getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Environment Setup](#environment-setup)
+  - [Installation](#installation)
+  - [Running the Application](#running-the-application)
+- [Available Scripts](#-available-scripts)
+- [Supabase Configuration](#-supabase-configuration)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-Bash
-git clone https://github.com/zennstrom/mic.git
-cd mic
-Install dependencies:
+---
 
-Bash
-npm install
-# or
-yarn install
-Configure Environment Variables:
-Create a .env file in the root directory (based on .env.example if available) and add your Supabase credentials:
+## 🌟 Overview
 
-Code snippet
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-Run the development server:
+**MIC** is a full-featured web client engineered for fast page loads, responsive navigation, and robust cloud data persistence. It leverages Vite's blazing-fast build pipeline, modern React design patterns (including Providers, Router switches, and custom Error Boundaries), and Supabase for backend integration.
 
-Bash
-npm run dev
-🛠 Tech Stack
-Frontend: React, TypeScript, Vite
+---
 
-Backend/Database: Supabase
+## ✨ Key Features
 
-Routing: React Router (via App.tsx)
+- ⚡ **Instant HMR & Build Speed**: Bundled with Vite for optimized developer experience.
+- 🛡️ **End-to-End Type Safety**: Written entirely in TypeScript to reduce runtime exceptions.
+- 🗄️ **Seamless Database Connectivity**: Out-of-the-box Supabase integration using `@supabase/supabase-js`.
+- 🎨 **Theme & Context Management**: Built-in Theme and Product context providers with global error handling (`ErrorBoundary`).
+- 📱 **Responsive UI**: Adaptive layout across mobile, tablet, and desktop interfaces.
 
-📦 Features
-Supabase Integration: Secure database connectivity and authentication via supabaseClient.ts.
+---
 
-Type-Safe Development: Built with TypeScript for better code reliability.
+## 🛠 Tech Stack
 
-Modern Build Tooling: Optimized build process using Vite.
+| Domain | Technology |
+|---|---|
+| **Framework** | [React 18+](https://reactjs.org/) |
+| **Language** | [TypeScript](https://www.typescriptlang.org/) |
+| **Build Tool / Bundler** | [Vite](https://vitejs.dev/) |
+| **Backend & Auth** | [Supabase](https://supabase.com/) |
+| **Routing** | [React Router / Wouter](https://github.com/molefrog/wouter) |
+| **Styling** | Modern CSS / Tailwind CSS |
 
-🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
+---
+
+## 📂 Architecture & Directory Structure
+
+```text
+mic/
+├── client/
+│   ├── src/
+│   │   ├── assets/           # Static assets (images, icons, fonts)
+│   │   ├── components/       # Reusable UI components & layouts
+│   │   ├── context/          # Global state (Theme, Product contexts)
+│   │   ├── pages/            # Page components (Home, About, Contact, Admin)
+│   │   ├── services/         # API hooks and fetch utilities
+│   │   ├── App.tsx           # Application root & Router configuration
+│   │   ├── main.tsx          # React DOM entry point
+│   │   └── supabaseClient.ts # Supabase client instance & initialization
+│   ├── index.html            # Vite HTML template
+│   ├── package.json          # Frontend dependencies & scripts
+│   └── vite.config.ts        # Vite build & plugin configuration
+├── .env.example              # Environment variables template
+├── .gitignore
+└── README.md
