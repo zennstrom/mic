@@ -1,22 +1,51 @@
-<<<<<<< HEAD
-# React + Vite
+MIC
+A web application built with React, TypeScript, and Supabase.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🚀 Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-Currently, two official plugins are available:
+Prerequisites
+Node.js (v18+ recommended)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+npm or yarn
 
-## React Compiler
+A Supabase project
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Installation
+Clone the repository:
 
-Note: This will impact Vite dev & build performances.
+Bash
+git clone https://github.com/zennstrom/mic.git
+cd mic
+Install dependencies:
 
-## Expanding the ESLint configuration
+Bash
+npm install
+# or
+yarn install
+Configure Environment Variables:
+Create a .env file in the root directory (based on .env.example if available) and add your Supabase credentials:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# mic
->>>>>>> 47886f9296a77ead22ac535b115b8494d5084688
+Code snippet
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+Run the development server:
+
+Bash
+npm run dev
+🛠 Tech Stack
+Frontend: React, TypeScript, Vite
+
+Backend/Database: Supabase
+
+Routing: React Router (via App.tsx)
+
+📦 Features
+Supabase Integration: Secure database connectivity and authentication via supabaseClient.ts.
+
+Type-Safe Development: Built with TypeScript for better code reliability.
+
+Modern Build Tooling: Optimized build process using Vite.
+
+🤝 Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
